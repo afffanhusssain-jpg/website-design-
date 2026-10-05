@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tagsmith: custom novelty plates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=Bebas+Neue&family=Bungee&family=Saira+Stencil+One&family=Pirata+One&family=Yellowtail&family=Orbitron:wght@800&family=Monoton&family=Permanent+Marker&family=Racing+Sans+One&family=DM+Serif+Display&family=Press+Start+2P&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+@property --p-bg{syntax:'<color>';inherits:true;initial-value:#FFD21F}
+@property --p-bg2{syntax:'<color>';inherits:true;initial-value:#FFB800}
+@property --p-ink{syntax:'<color>';inherits:true;initial-value:#111318}
+@property --p-rim{syntax:'<color>';inherits:true;initial-value:#111318}
+
+:root{
+  --cobalt:#1B36E8;--cobalt-deep:#0F22A8;--night:#080E3A;--signal:#FFD21F;--signal-edge:#B38F00;
+  --paper:#F1F3F9;--surface:#FFFFFF;--ink:#080E3A;--ink-soft:#4B547F;--line:#D3D9EA;--field:#FFFFFF;
+  --booth:#DDE2F3;--focus:#1B36E8;--pressed:#E8ECFF;
+  --display:'Barlow Condensed','Arial Narrow','Roboto Condensed',Impact,sans-serif;
+  --body:'Barlow','Segoe UI',system-ui,sans-serif;
+  --nav-h:60px;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#060A2B;--surface:#0D1445;--ink:#EEF1FF;--ink-soft:#A8B1DF;--line:#252F78;--field:#111A55;
+    --booth:#121A58;--focus:#FFD21F;--pressed:#1A2470;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#060A2B;--surface:#0D1445;--ink:#EEF1FF;--ink-soft:#A8B1DF;--line:#252F78;--field:#111A55;
+  --booth:#121A58;--focus:#FFD21F;--pressed:#1A2470;color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + env(safe-area-inset-top,0px));background:var(--night)}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+.on-dark :focus-visible,.nav :focus-visible{outline-color:var(--signal)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ───────── The plate ───────── */
+.plate{container-type:inline-size;width:100%;margin-inline:auto;filter:drop-shadow(0 16px 22px rgba(3,8,40,.38));
+  transition:--p-bg .5s ease,--p-bg2 .5s ease,--p-ink .5s ease,--p-rim .5s ease,max-width .5s cubic-bezier(.2,.8,.2,1)}
+.plate[data-size="us"]{--ar:2;--fs:34cqw;--pad:5cqw 6.5cqw;--line-fs:5cqw}
+.plate[data-size="euro"]{--ar:4.727;--fs:17cqw;--pad:2.6cqw 5cqw;--line-fs:0}
+.plate[data-size="moto"]{--ar:1.75;--fs:36cqw;--pad:6cqw 7cqw;--line-fs:6.2cqw;max-width:64%}
+.plate-face{position:relative;aspect-ratio:var(--ar);min-height:0;border-radius:3.4cqw;overflow:hidden;
+  background:linear-gradient(180deg,var(--p-bg),var(--p-bg2));color:var(--p-ink);
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto;justify-items:center;padding:var(--pad);
+  transition:aspect-ratio .5s cubic-bezier(.2,.8,.2,1)}
+.plate-face::before{content:"";position:absolute;inset:1.5cqw;border:.85cqw solid var(--p-rim);border-radius:2.2cqw;z-index:2;pointer-events:none;
+  box-shadow:0 .22cqw 0 rgba(0,0,0,.28),inset 0 .22cqw 0 rgba(0,0,0,.22),0 -.16cqw 0 rgba(255,255,255,.3)}
+.plate[data-size="euro"] .plate-face::before{inset:1.1cqw;border-width:.6cqw;border-radius:2.4cqw}
+.bolt{position:absolute;width:2.6cqw;height:2.6cqw;border-radius:50%;z-index:2;background:rgba(0,0,0,.55);
+  box-shadow:inset 0 .4cqw .5cqw rgba(0,0,0,.6),0 .2cqw 0 rgba(255,255,255,.35)}
+.bolt:nth-child(1){top:5.4cqw;left:15cqw}.bolt:nth-child(2){top:5.4cqw;right:15cqw}
+.bolt:nth-child(3){bottom:5.4cqw;left:15cqw}.bolt:nth-child(4){bottom:5.4cqw;right:15cqw}
+.plate[data-size="euro"] .bolt{display:none}
+.plate[data-size="moto"] .bolt{top:auto;bottom:auto}
+.plate[data-size="moto"] .bolt:nth-child(1),.plate[data-size="moto"] .bolt:nth-child(2){top:6.4cqw}
+.plate[data-size="moto"] .bolt:nth-child(3),.plate[data-size="moto"] .bolt:nth-child(4){bottom:6.4cqw}
+.plate-top,.plate-bottom{position:relative;z-index:2;font:700 var(--line-fs)/1.25 var(--display);letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;
+  text-shadow:0 .05em 0 rgba(0,0,0,.25)}
+.plate-top{grid-row:1}.plate-bottom{grid-row:3}
+.plate-top:empty,.plate-bottom:empty{display:none}
+.plate[data-size="euro"] .plate-top,.plate[data-size="euro"] .plate-bottom{display:none}
+.plate-main{grid-row:2;position:relative;z-index:2;width:100%;height:100%;min-width:0;min-height:0}
+.plate-text{position:absolute;left:50%;top:50%;white-space:nowrap;line-height:1;font-size:calc(var(--fs) * var(--k,1));
+  transform:translate(-50%,-50%) scale(var(--s,1));transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .3s;
+  text-shadow:0 -.012em 0 rgba(255,255,255,.4),0 .03em 0 rgba(0,0,0,.42),0 .07em .06em rgba(0,0,0,.22)}
+.plate-text.ghosted{opacity:.3}
+.ch{display:inline-block}
+.ch.in{animation:stamp .42s cubic-bezier(.2,1.5,.4,1) both;animation-delay:calc(var(--d,0) * 46ms)}
+@keyframes stamp{from{opacity:0;transform:translateY(-.22em) scale(1.55);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+.plate-finish,.plate-sheen{position:absolute;inset:0;border-radius:inherit;pointer-events:none}
+.plate-finish{z-index:1}.plate-sheen{z-index:3}
+.plate[data-finish="gloss"] .plate-finish{background:linear-gradient(165deg,rgba(255,255,255,.36),rgba(255,255,255,0) 38%,rgba(0,0,0,0) 62%,rgba(0,0,0,.18))}
+.plate[data-finish="matte"] .plate-finish{background:rgba(127,127,127,.07)}
+.plate[data-finish="carbon"] .plate-finish{background:repeating-linear-gradient(45deg,rgba(0,0,0,.2) 0 .5cqw,transparent .5cqw 1cqw),repeating-linear-gradient(-45deg,rgba(255,255,255,.09) 0 .5cqw,transparent .5cqw 1cqw),linear-gradient(165deg,rgba(255,255,255,.2),transparent 40%,rgba(0,0,0,.2))}
+.plate[data-finish="brushed"] .plate-finish{background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 1px,rgba(0,0,0,.08) 1px 2px,transparent 2px 5px),linear-gradient(180deg,rgba(255,255,255,.24),transparent 30%,transparent 70%,rgba(0,0,0,.16))}
+.plate-sheen{background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,.32) 48%,rgba(255,255,255,.07) 55%,transparent 66%);background-size:260% 100%;background-position:var(--sh,120%) 0}
+.plate[data-finish="matte"] .plate-sheen{opacity:.35}
+.plate.flash .plate-sheen{animation:sweep .9s ease}
+@keyframes sweep{from{background-position:130% 0}to{background-position:-30% 0}}
+
+/* ───────── Buttons ───────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:12px 24px;border:0;border-radius:10px;
+  font:700 21px/1 var(--display);letter-spacing:.02em;text-decoration:none;transition:transform .12s,box-shadow .12s,background .2s}
+.btn-go{background:var(--signal);color:#080E3A;box-shadow:0 5px 0 var(--signal-edge)}
+.btn-go:hover{background:#FFDD4D}
+.btn-go:active{transform:translateY(4px);box-shadow:0 1px 0 var(--signal-edge)}
+.btn-line{background:transparent;color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.7)}
+.btn-line:hover{background:rgba(255,255,255,.12)}
+
+/* ───────── Nav ───────── */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;height:var(--nav-h);display:flex;align-items:center;gap:28px;
+  padding:0 clamp(16px,4vw,40px);background:var(--cobalt);color:#fff;transition:background .3s,box-shadow .3s}
+.nav.scrolled{background:var(--night);box-shadow:0 1px 0 rgba(255,255,255,.1)}
+.brand{display:inline-flex;align-items:center;padding:5px 12px 6px;border-radius:7px;background:var(--signal);color:#080E3A;text-decoration:none;
+  font:800 22px/1 var(--display);letter-spacing:.05em;text-transform:uppercase;box-shadow:inset 0 0 0 2px #080E3A,inset 0 0 0 4px var(--signal)}
+.nav-links{display:flex;gap:26px;margin-left:auto}
+.nav-links a{color:#fff;text-decoration:none;font:600 18px var(--display);letter-spacing:.02em;opacity:.86;padding:8px 0}
+.nav-links a:hover{opacity:1;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
+.cart-btn{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;border:0;border-radius:10px;background:rgba(255,255,255,.14);color:#fff;font:600 18px var(--display)}
+.cart-btn:hover{background:rgba(255,255,255,.24)}
+.cart-count{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--signal);color:#080E3A;font:700 15px var(--body)}
+.cart-count.bump{animation:bump .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes bump{40%{transform:scale(1.5)}}
+@media (max-width:760px){.nav-links{display:none}.cart-btn{margin-left:auto}}
+
+/* ───────── Hero ───────── */
+.hero{position:relative;overflow:clip;text-align:center;color:#fff;padding:clamp(28px,6vh,60px) 20px 0;
+  background:radial-gradient(110% 70% at 50% 68%,#3554FF 0%,var(--cobalt) 40%,var(--cobalt-deep) 100%)}
+.hero h1{position:relative;z-index:1;font:800 clamp(46px,8.8vw,128px)/.86 var(--display);letter-spacing:-.012em;max-width:16ch;margin:0 auto;text-wrap:balance}
+.rise{display:inline-block;opacity:0;transform:translateY(.5em) rotate(3deg);animation:rise .75s cubic-bezier(.2,.9,.2,1) forwards;animation-delay:calc(var(--i) * 70ms + 80ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+.lede{position:relative;z-index:1;max-width:44ch;margin:20px auto 0;font-size:clamp(17px,1.5vw,20px);font-weight:500;color:rgba(255,255,255,.9);
+  opacity:0;animation:rise .7s ease .55s forwards}
+.cta{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:28px;opacity:0;animation:rise .7s ease .7s forwards}
+.hero-stage{position:relative;z-index:1;margin:clamp(30px,5vh,52px) auto 0;padding-bottom:clamp(84px,13vh,140px);width:min(560px,88vw);perspective:1100px}
+.hero-drop{animation:drop 1s cubic-bezier(.3,1.45,.5,1) .6s both;transform-origin:50% 0}
+@keyframes drop{from{opacity:0;transform:translateY(-70px) rotateX(60deg) scale(.9)}to{opacity:1;transform:none}}
+.plate-btn{display:grid;place-items:center;width:100%;aspect-ratio:2/1;padding:0;border:0;background:none;transform-style:preserve-3d;will-change:transform}
+.hero-note{margin-top:22px;font-size:15px;color:rgba(255,255,255,.78)}
+.road{position:absolute;left:0;right:0;bottom:0;height:48%;perspective:340px;perspective-origin:50% 0;overflow:hidden;pointer-events:none;
+  -webkit-mask-image:linear-gradient(transparent 4%,#000 50%);mask-image:linear-gradient(transparent 4%,#000 50%)}
+.plane{position:absolute;left:0;right:0;bottom:0;height:1500px;transform-origin:50% 100%;transform:rotateX(74deg);overflow:hidden;
+  background:linear-gradient(90deg,transparent calc(50% - 330px),rgba(255,255,255,.6) calc(50% - 330px),rgba(255,255,255,.6) calc(50% - 320px),rgba(4,10,60,.4) calc(50% - 320px),rgba(4,10,60,.4) calc(50% + 320px),rgba(255,255,255,.6) calc(50% + 320px),rgba(255,255,255,.6) calc(50% + 330px),transparent calc(50% + 330px))}
+.dash{position:absolute;left:calc(50% - 7px);width:14px;top:-240px;bottom:0;background:repeating-linear-gradient(180deg,var(--signal) 0 100px,transparent 100px 240px);animation:drive .9s linear infinite}
+@keyframes drive{to{transform:translateY(240px)}}
+
+/* ───────── Looks strip ───────── */
+.looks{background:var(--night);color:#fff;padding:26px 0 34px;overflow:clip}
+.looks-title{text-align:center;padding-inline:20px;text-wrap:balance;font:600 21px var(--display);letter-spacing:.02em;color:rgba(255,255,255,.82);margin-bottom:22px}
+.track{display:flex;align-items:center;width:max-content;animation:slide 52s linear infinite}
+.looks:hover .track,.looks:focus-within .track{animation-play-state:paused}
+@keyframes slide{to{transform:translateX(-50%)}}
+.mini{flex:none;margin-right:30px;padding:6px;border:0;background:none;border-radius:12px;transition:transform .25s cubic-bezier(.2,1.4,.4,1)}
+.mini:hover{transform:translateY(-6px) rotate(-2deg)}
+.mini .plate{max-width:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
+
+/* ───────── Sections ───────── */
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(52px,8vw,104px) clamp(16px,4vw,40px)}
+.head{margin-bottom:clamp(24px,4vw,44px)}
+.head h2{font:800 clamp(38px,5.4vw,72px)/.92 var(--display);letter-spacing:-.008em;text-wrap:balance}
+.head p{margin-top:12px;max-width:52ch;color:var(--ink-soft);font-size:18px}
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--o,0) * 110ms)}
+.js .rv.in{opacity:1;transform:none}
+
+/* ───────── Studio ───────── */
+.bench{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(20px,3vw,44px);align-items:start}
+.stage{position:sticky;top:calc(var(--nav-h) + env(safe-area-inset-top,0px) + 18px);border-radius:24px;background:var(--booth);overflow:hidden;
+  padding:clamp(26px,5vw,64px) clamp(18px,4vw,56px) 22px;transition:--p-bg .6s ease}
+.glow{position:absolute;inset:8% 6% 26%;background:radial-gradient(closest-side,var(--p-bg),transparent);filter:blur(46px);opacity:.6;pointer-events:none}
+.stage-plate{position:relative;display:grid;place-items:center;aspect-ratio:2/1;perspective:1000px}
+.tilt{width:100%;transform-style:preserve-3d;will-change:transform}
+.tilt.spin{animation:spin .7s cubic-bezier(.3,.9,.3,1)}
+@keyframes spin{from{transform:rotateX(0)}to{transform:rotateX(360deg)}}
+.stage-foot{position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:clamp(18px,3vw,36px)}
+.dims{font:600 18px var(--display);letter-spacing:.03em;color:var(--ink-soft)}
+.ghost-btn{min-height:44px;padding:8px 16px;border:1.5px solid var(--ink);border-radius:10px;background:transparent;font:700 18px var(--display);letter-spacing:.02em;transition:background .2s,color .2s}
+.ghost-btn:hover{background:var(--ink);color:var(--paper)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:24px}
+.group{padding:22px clamp(16px,2.4vw,26px) 24px;border-top:1px solid var(--line)}
+.group:first-child{border-top:0}
+.group h3{font:700 24px/1 var(--display);letter-spacing:.01em;margin-bottom:14px}
+.lbl{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;font-weight:600;color:var(--ink-soft);margin-bottom:6px}
+.field{display:block;width:100%;min-height:46px;padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font:500 17px var(--body)}
+.field:focus{outline:3px solid var(--focus);outline-offset:1px;border-color:transparent}
+.field:disabled{opacity:.45}
+.field-main{font:700 30px/1.1 var(--display);letter-spacing:.08em;min-height:58px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.sym{width:44px;height:44px;border:1.5px solid var(--line);border-radius:10px;background:var(--field);font-size:19px;transition:transform .15s}
+.sym:hover{transform:translateY(-2px);border-color:var(--ink)}
+.check{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-left:auto;font-weight:600;font-size:16px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--cobalt)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.hint{margin-top:10px;font-size:15px;color:var(--ink-soft)}
+.warn{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--pressed);font-size:15px;font-weight:500}
+
+.opts{display:grid;gap:10px}
+.opt{position:relative;border:1.5px solid var(--line);border-radius:12px;background:var(--field);text-align:left;transition:border-color .2s,background .2s,transform .15s}
+.opt:hover{transform:translateY(-2px);border-color:var(--ink-soft)}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--pressed);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.sizes{grid-template-columns:repeat(3,1fr)}
+.size-opt{display:flex;flex-direction:column;gap:2px;padding:12px}
+.shape{display:block;align-self:flex-start;height:18px;max-width:100%;border:2px solid currentColor;border-radius:4px;margin-bottom:10px}
+.size-opt b{font:700 19px/1.1 var(--display)}
+.size-opt small{font-size:14px;color:var(--ink-soft)}
+.size-opt em{font-style:normal;font-weight:600;font-size:15px;margin-top:4px}
+.swatches{grid-template-columns:repeat(6,1fr)}
+.sw{aspect-ratio:1.5;min-height:44px;padding:0;border-radius:9px;font:800 20px/1 var(--display);display:grid;place-items:center;overflow:hidden}
+.sw[aria-pressed="true"]{outline:3px solid var(--focus);outline-offset:2px;box-shadow:none}
+.mix{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.mix label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;color:var(--ink-soft)}
+.mix input[type="color"]{width:100%;height:44px;padding:3px;border:1.5px solid var(--line);border-radius:10px;background:var(--field);cursor:pointer}
+.fonts{grid-template-columns:repeat(3,1fr)}
+.font-opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:78px;padding:10px 6px;text-align:center;overflow:hidden}
+.font-opt span{font-size:26px;line-height:1.1;white-space:nowrap}
+.font-opt small{font:500 13px var(--body);color:var(--ink-soft)}
+.finishes{grid-template-columns:repeat(4,1fr)}
+.fin-opt{display:flex;flex-direction:column;gap:8px;padding:10px;font-weight:600;font-size:14px;line-height:1.2}
+.fin-chip{display:block;height:34px;border-radius:7px;background:#3B4470;position:relative;overflow:hidden}
+.fin-chip::after{content:"";position:absolute;inset:0}
+.fin-chip[data-f="gloss"]::after{background:linear-gradient(160deg,rgba(255,255,255,.6),transparent 45%,rgba(0,0,0,.25))}
+.fin-chip[data-f="carbon"]::after{background:repeating-linear-gradient(45deg,rgba(0,0,0,.45) 0 4px,transparent 4px 8px),repeating-linear-gradient(-45deg,rgba(255,255,255,.14) 0 4px,transparent 4px 8px)}
+.fin-chip[data-f="brushed"]::after{background:repeating-linear-gradient(90deg,rgba(255,255,255,.22) 0 1px,rgba(0,0,0,.12) 1px 2px,transparent 2px 5px)}
+.fin-opt small{font-weight:500;color:var(--ink-soft)}
+
+.buy{position:sticky;bottom:env(safe-area-inset-bottom,0px);z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+  padding:14px clamp(16px,2.4vw,26px);background:var(--night);color:#fff;border-radius:0 0 23px 23px}
+.price{font:800 36px/1 var(--display);letter-spacing:.01em;min-width:4.2ch}
+.qty{display:inline-flex;align-items:center;border-radius:10px;background:rgba(255,255,255,.12)}
+.qty button{width:44px;height:44px;border:0;background:none;color:#fff;font-size:22px;font-weight:600}
+.qty output{min-width:28px;text-align:center;font-weight:600}
+.buy .btn{margin-left:auto}
+
+@media (max-width:880px){
+  .bench{grid-template-columns:minmax(0,1fr);gap:16px}
+  .stage{z-index:20;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));margin-inline:calc(clamp(16px,4vw,40px) * -1);border-radius:0 0 20px 20px;padding:14px 16px 8px}
+  .stage-plate{max-width:250px;margin-inline:auto}
+  .stage-foot{margin-top:6px;flex-wrap:nowrap}
+  .dims{font-size:15px}
+  .ghost-btn{flex:none;min-height:38px;padding:5px 12px;font-size:16px}
+  .swatches{grid-template-columns:repeat(4,1fr)}
+  .buy{flex-wrap:nowrap;gap:10px;padding:10px 12px}
+  .price{font-size:28px;min-width:0}
+  .qty button{width:38px}
+  .buy .btn{flex:1;padding:12px 10px;font-size:19px;white-space:nowrap}
+}
+@media (max-width:420px){.size-opt{padding:10px 8px}.size-opt b{font-size:17px}.finishes,.mix{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.fonts{grid-template-columns:repeat(2,1fr)}}
+
+/* ───────── Steps ───────── */
+.band{background:var(--surface);border-block:1px solid var(--line)}
+.lane{height:5px;margin-bottom:30px}
+.lane::before{content:"";display:block;height:100%;background:repeating-linear-gradient(90deg,var(--ink) 0 26px,transparent 26px 46px);clip-path:inset(0 100% 0 0);transition:clip-path 1.6s cubic-bezier(.3,.7,.2,1) .2s}
+.lane.in::before{clip-path:inset(0)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,4vw,56px);list-style:none;margin:0;padding:0}
+.steps b{display:block;font:800 clamp(64px,8vw,112px)/.8 var(--display);color:var(--cobalt)}
+:root[data-theme="dark"] .steps b{color:var(--signal)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .steps b{color:var(--signal)}}
+.steps h3{font:700 30px/1 var(--display);margin:16px 0 8px}
+.steps p{color:var(--ink-soft);max-width:30ch}
+@media (max-width:700px){.steps{grid-template-columns:1fr}}
+
+/* ───────── Car ───────── */
+.fit{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,5vw,72px);align-items:center}
+.car{position:relative;aspect-ratio:2/1}
+.car svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.car-plate{position:absolute;left:50%;transform:translateX(-50%);transition:width .5s,top .5s}
+.car-plate[data-size="us"]{width:17%;top:67.5%}
+.car-plate[data-size="euro"]{width:30%;top:71%}
+.car-plate[data-size="moto"]{width:13%;top:68%}
+.car-plate .plate{max-width:none;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4))}
+.lamp{fill:var(--signal)}
+.car.in .lamp{animation:blink 1.2s steps(1) .5s 1}
+@keyframes blink{0%,40%{fill:#fff;filter:drop-shadow(0 0 14px #FFE98A)}20%,60%{fill:var(--signal);filter:none}}
+.car-cap{margin-top:14px;font-size:15px;color:var(--ink-soft);text-align:center}
+.uses{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:18px}
+.uses h3{font:700 26px/1 var(--display);margin-bottom:4px}
+.uses p{color:var(--ink-soft)}
+.notice{margin-top:28px;padding:16px 18px;border:1.5px solid var(--ink);border-radius:12px;font-size:16px}
+@media (max-width:860px){.fit{grid-template-columns:1fr}}
+
+/* ───────── FAQ ───────── */
+.faq{max-width:820px}
+.faq details{border-top:1.5px solid var(--line)}
+.faq details:last-child{border-bottom:1.5px solid var(--line)}
+.faq summary{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 2px;cursor:pointer;list-style:none;font:700 clamp(22px,2.4vw,28px)/1.1 var(--display)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";flex:none;width:16px;height:16px;border-right:3px solid currentColor;border-bottom:3px solid currentColor;transform:rotate(45deg) translate(-3px,-3px);transition:transform .3s}
+.faq details[open] summary::after{transform:rotate(-135deg) translate(-3px,-3px)}
+.faq details p{padding:0 2px 22px;max-width:62ch;color:var(--ink-soft)}
+.faq details[open] p{animation:rise .4s ease both}
+
+footer{background:var(--night);color:rgba(255,255,255,.82)}
+.foot{display:flex;flex-wrap:wrap;gap:20px 48px;align-items:flex-start;justify-content:space-between;max-width:1240px;margin:0 auto;padding:44px clamp(16px,4vw,40px)}
+.foot p{max-width:46ch;font-size:15px;margin-top:14px}
+
+/* ───────── Cart drawer ───────── */
+.scrim{position:fixed;inset:0;z-index:80;background:rgba(4,8,40,.55);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:90;width:min(430px,100vw);display:flex;flex-direction:column;background:var(--surface);color:var(--ink);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);transform:translateX(102%);visibility:hidden;
+  transition:transform .4s cubic-bezier(.2,.9,.2,1),visibility 0s .4s;box-shadow:-20px 0 50px rgba(3,8,40,.3)}
+.drawer.open{transform:none;visibility:visible;transition:transform .4s cubic-bezier(.2,.9,.2,1)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
+.drawer-head h2{font:800 32px/1 var(--display)}
+.x{width:44px;height:44px;border:0;border-radius:10px;background:var(--pressed);font-size:24px;line-height:1}
+.items{flex:1;overflow:auto;padding:8px 20px;list-style:none;margin:0}
+.items li{display:grid;grid-template-columns:104px 1fr auto;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.items .plate{max-width:none;filter:drop-shadow(0 4px 5px rgba(3,8,40,.3))}
+.items b{display:block;font:700 21px/1.1 var(--display);letter-spacing:.03em}
+.items small{display:block;font-size:14px;color:var(--ink-soft)}
+.items .rm{border:0;background:none;padding:4px 0;margin-top:4px;font-size:14px;font-weight:600;text-decoration:underline;color:var(--ink-soft);min-height:32px}
+.items .amt{font-weight:600}
+.empty{padding:40px 20px;text-align:center;color:var(--ink-soft)}
+.drawer-foot{padding:18px 20px 22px;border-top:1px solid var(--line)}
+.total{display:flex;justify-content:space-between;align-items:baseline;font:800 30px/1 var(--display);margin-bottom:14px}
+.drawer-foot .btn{width:100%}
+.drawer-foot .btn:disabled{opacity:.4;cursor:not-allowed}
+.co-note{margin-top:12px;font-size:15px;color:var(--ink-soft)}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:95;transform:translate(-50%,30px);opacity:0;pointer-events:none;
+  padding:12px 20px;border-radius:12px;background:var(--night);color:#fff;font-weight:600;box-shadow:0 10px 30px rgba(3,8,40,.4);transition:opacity .3s,transform .3s cubic-bezier(.2,1.4,.4,1)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.flyer{position:fixed;z-index:96;pointer-events:none}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
+  html{scroll-behavior:auto}
+  .dash,.track{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Tagsmith home">Tagsmith</a>
+  <nav class="nav-links" aria-label="Sections">
+    <a href="#build">Build</a>
+    <a href="#looks">Looks</a>
+    <a href="#how">How it works</a>
+    <a href="#faq">Questions</a>
+  </nav>
+  <button class="cart-btn" id="cartBtn" type="button" aria-haspopup="dialog">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+    Order <span class="cart-count" id="cartCount">0</span>
+  </button>
+</header>
+
+<main id="top">
+  <section class="hero on-dark">
+    <h1 aria-label="Design a plate nobody else has.">
+      <span class="rise" style="--i:0" aria-hidden="true">Design</span>
+      <span class="rise" style="--i:1" aria-hidden="true">a</span>
+      <span class="rise" style="--i:2" aria-hidden="true">plate</span>
+      <span class="rise" style="--i:3" aria-hidden="true">nobody</span>
+      <span class="rise" style="--i:4" aria-hidden="true">else</span>
+      <span class="rise" style="--i:5" aria-hidden="true">has.</span>
+    </h1>
+    <p class="lede">Custom novelty plates for the front of your car, your bike or your garage wall. Pick any colors and any lettering, and we make it to order.</p>
+    <div class="cta">
+      <a class="btn btn-go" href="#build">Start designing</a>
+      <a class="btn btn-line" href="#looks">Browse looks</a>
+    </div>
+    <div class="hero-stage">
+      <div class="hero-drop">
+        <button class="plate-btn" id="heroBtn" type="button"><div id="heroPlate"></div></button>
+      </div>
+      <p class="hero-note">Tap the plate to start from this design</p>
+    </div>
+    <div class="road" aria-hidden="true"><div class="plane"><div class="dash"></div></div></div>
+  </section>
+
+  <section class="looks on-dark" id="looks" aria-label="Example designs">
+    <p class="looks-title">Pick a look to start from, then make it yours</p>
+    <div class="track" id="track"></div>
+  </section>
+
+  <section class="wrap" id="build">
+    <div class="head rv">
+      <h2>Build yours</h2>
+      <p>Every change shows on the plate as you make it.</p>
+    </div>
+    <div class="bench">
+      <div class="stage" id="stage">
+        <div class="glow" aria-hidden="true"></div>
+        <div class="stage-plate" id="stagePlate">
+          <div class="tilt" id="tilt"><div id="plate" role="img" aria-label="Preview of your plate"></div></div>
+        </div>
+        <div class="stage-foot">
+          <span class="dims" id="dims"></span>
+          <button class="ghost-btn" id="shuffle" type="button">Shuffle the style</button>
+        </div>
+      </div>
+
+      <div class="panel" id="panel">
+        <div class="group">
+          <h3>What it says</h3>
+          <label class="lbl" for="tMain"><span>Main text</span><span id="count"></span></label>
+          <input class="field field-main" id="tMain" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="YOUR TEXT">
+          <div class="row">
+            <button class="sym" type="button" data-sym="♥" aria-label="Add a heart">♥</button>
+            <button class="sym" type="button" data-sym="★" aria-label="Add a star">★</button>
+            <button class="sym" type="button" data-sym="•" aria-label="Add a dot">•</button>
+            <label class="check"><input type="checkbox" id="caps"> All caps</label>
+          </div>
+          <div class="two">
+            <div><label class="lbl" for="tTop">Top line</label><input class="field" id="tTop" type="text" maxlength="18" autocomplete="off"></div>
+            <div><label class="lbl" for="tBottom">Bottom line</label><input class="field" id="tBottom" type="text" maxlength="18" autocomplete="off"></div>
+          </div>
+          <p class="hint" id="linesHint" hidden>Euro style plates carry the main text only.</p>
+        </div>
+        <div class="group">
+          <h3>Size</h3>
+          <div class="opts sizes" id="sizes"></div>
+        </div>
+        <div class="group">
+          <h3>Colors</h3>
+          <div class="opts swatches" id="swatches"></div>
+          <div class="mix">
+            <label>Plate<input type="color" id="cBg"></label>
+            <label>Fades to<input type="color" id="cBg2"></label>
+            <label>Lettering<input type="color" id="cInk"></label>
+            <label>Border<input type="color" id="cRim"></label>
+          </div>
+          <div class="row"><label class="check" style="margin-left:0"><input type="checkbox" id="fade"> Two-tone fade</label></div>
+          <p class="warn" id="warn" hidden>The lettering and plate colors are very close, so the text will be hard to read.</p>
+        </div>
+        <div class="group">
+          <h3>Lettering</h3>
+          <div class="opts fonts" id="fonts"></div>
+        </div>
+        <div class="group">
+          <h3>Finish</h3>
+          <div class="opts finishes" id="finishes"></div>
+        </div>
+        <div class="buy">
+          <span class="price" id="price" aria-live="polite">$0.00</span>
+          <span class="qty">
+            <button type="button" id="qMinus" aria-label="One fewer">−</button>
+            <output id="qty" aria-label="Quantity">1</output>
+            <button type="button" id="qPlus" aria-label="One more">+</button>
+          </span>
+          <button class="btn btn-go" id="add" type="button">Add to order</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="how">
+    <div class="wrap">
+      <div class="head rv"><h2>From your screen to your bumper</h2></div>
+      <div class="lane rv" aria-hidden="true"></div>
+      <ol class="steps">
+        <li class="rv" style="--o:0"><b aria-hidden="true">1</b><h3>Design it</h3><p>Type your text, then choose the size, colors, lettering and finish.</p></li>
+        <li class="rv" style="--o:1"><b aria-hidden="true">2</b><h3>We make it</h3><p>Each plate is produced to order from your exact design.</p></li>
+        <li class="rv" style="--o:2"><b aria-hidden="true">3</b><h3>It ships to you</h3><p>Delivered to any US address, drilled and ready to bolt on.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="fit">
+      <div class="rv">
+        <div class="car" id="car">
+          <svg viewBox="0 0 600 300" aria-hidden="true">
+            <ellipse cx="300" cy="286" rx="250" ry="10" fill="rgba(3,8,40,.22)"/>
+            <rect x="92" y="232" width="74" height="54" rx="12" fill="#0A0C1C"/>
+            <rect x="434" y="232" width="74" height="54" rx="12" fill="#0A0C1C"/>
+            <path d="M168 138 Q184 62 300 58 Q416 62 432 138 Z" fill="#0F22A8"/>
+            <path d="M190 134 Q204 80 300 77 Q396 80 410 134 Z" fill="#BFD0FF"/>
+            <rect x="52" y="120" width="34" height="18" rx="8" fill="#0F22A8"/>
+            <rect x="514" y="120" width="34" height="18" rx="8" fill="#0F22A8"/>
+            <rect x="70" y="132" width="460" height="124" rx="40" fill="#1B36E8"/>
+            <path d="M110 150 H490" stroke="rgba(255,255,255,.28)" stroke-width="4" stroke-linecap="round"/>
+            <ellipse class="lamp" cx="132" cy="184" rx="40" ry="20"/>
+            <ellipse class="lamp" cx="468" cy="184" rx="40" ry="20"/>
+            <rect x="198" y="164" width="204" height="42" rx="14" fill="#080E3A"/>
+            <path d="M214 178 H386 M214 192 H386" stroke="rgba(255,255,255,.22)" stroke-width="3" stroke-linecap="round"/>
+            <rect x="84" y="216" width="432" height="38" rx="18" fill="#0F22A8"/>
+          </svg>
+          <div class="car-plate" id="carWrap" data-size="us"><div id="carPlate"></div></div>
+        </div>
+        <p class="car-cap">Your current design, on the front bumper</p>
+      </div>
+      <div class="rv" style="--o:1">
+        <div class="head" style="margin-bottom:0">
+          <h2>The front bumper is yours</h2>
+          <p>Georgia only asks for a state tag on the back of the car. The front is free for whatever you want it to say.</p>
+        </div>
+        <ul class="uses">
+          <li><h3>On the car</h3><p>The standard size fits a regular US plate bracket. The long Euro style suits European bumpers.</p></li>
+          <li><h3>On the wall</h3><p>Hang one in the garage, the shop or the bar with a team, a nickname or a build date.</p></li>
+          <li><h3>As a gift</h3><p>New driver, new car, new baby, new business. Put the name on it.</p></li>
+        </ul>
+        <p class="notice">These are decorative plates. They do not replace the registration plate your state issues, and front-plate rules differ from state to state, so check yours before you mount one.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="faq">
+    <div class="wrap">
+      <div class="head rv"><h2>Questions</h2></div>
+      <div class="faq rv">
+        <details><summary>Can I put this on my car?</summary><p>Yes, on the front, in Georgia and other states that only require a rear plate. It is a decorative plate, so it never takes the place of your state-issued one. If your state requires a front registration plate, keep this one for the wall or the show field.</p></details>
+        <details><summary>What sizes do you make?</summary><p>US standard is 12 × 6 inches and fits regular US brackets. Euro style is the long 20.5 × 4.3 inch shape. Motorcycle is 7 × 4 inches.</p></details>
+        <details><summary>Can I get a color that is not in the presets?</summary><p>Yes. Under Colors, set the plate, the lettering and the border to any color you like, and turn on the two-tone fade if you want the plate to blend between two colors.</p></details>
+        <details><summary>Is there anything you will not make?</summary><p>We do not make plates that copy an official state plate, carry government or law-enforcement markings, or use a brand's logo without permission.</p></details>
+        <details><summary>How long does delivery take?</summary><p>[Add production and shipping times here once your supplier is confirmed.]</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="on-dark">
+  <div class="foot">
+    <div>
+      <a class="brand" href="#top">Tagsmith</a>
+      <p>Decorative novelty plates, made to order. Not a replacement for a state-issued registration plate.</p>
+    </div>
+    <div>
+      <p style="margin-top:0">Contact: [your email]</p>
+      <p>© 2026 Tagsmith</p>
+    </div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <div class="drawer-head">
+    <h2 id="drawerTitle">Your order</h2>
+    <button class="x" id="closeCart" type="button" aria-label="Close order">×</button>
+  </div>
+  <ul class="items" id="items"></ul>
+  <div class="drawer-foot">
+    <div class="total"><span>Total</span><span id="total">$0.00</span></div>
+    <button class="btn btn-go" id="checkout" type="button">Check out</button>
+    <p class="co-note" id="coNote" hidden>Checkout is not connected yet. This is a preview of the store, so no payment is taken.</p>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const money = n => '$' + n.toFixed(2);
+
+/* ── Catalog (sample prices: replace with your own) ── */
+const SIZES = {
+  us:   {name: 'US standard', dims: '12 × 6 in',     ar: 2,     max: 8,  price: 35, lines: true},
+  euro: {name: 'Euro style',  dims: '20.5 × 4.3 in', ar: 4.727, max: 10, price: 42, lines: false},
+  moto: {name: 'Motorcycle',  dims: '7 × 4 in',      ar: 1.75,  max: 6,  price: 29, lines: true}
+};
+const FINISHES = {
+  gloss:   {name: 'Gloss',         extra: 0},
+  matte:   {name: 'Matte',         extra: 0},
+  carbon:  {name: 'Carbon weave',  extra: 6},
+  brushed: {name: 'Brushed metal', extra: 6}
+};
+const FONTS = {
+  block:   {name: 'Standard',    fam: "'Barlow Condensed'",  fb: "'Arial Narrow',Impact,sans-serif", w: 700, caps: true,  ls: '.04em', k: 1.12},
+  tall:    {name: 'Tall',        fam: "'Bebas Neue'",        fb: "Impact,sans-serif",                w: 400, caps: true,  ls: '.05em', k: 1.1},
+  sign:    {name: 'Sign shop',   fam: "'Bungee'",            fb: "Impact,sans-serif",                w: 400, caps: true,  ls: '0',     k: .8},
+  stencil: {name: 'Stencil',     fam: "'Saira Stencil One'", fb: "Impact,sans-serif",                w: 400, caps: true,  ls: '.03em', k: .9},
+  oldeng:  {name: 'Old English', fam: "'Pirata One'",        fb: "'Old English Text MT',serif",      w: 400, caps: false, ls: '.01em', k: 1.05},
+  script:  {name: 'Script',      fam: "'Yellowtail'",        fb: "'Brush Script MT',cursive",        w: 400, caps: false, ls: '0',     k: 1.05},
+  tech:    {name: 'Tech',        fam: "'Orbitron'",          fb: "'Arial Black',sans-serif",         w: 800, caps: true,  ls: '.04em', k: .72},
+  neon:    {name: 'Neon',        fam: "'Monoton'",           fb: "Impact,sans-serif",                w: 400, caps: true,  ls: '.02em', k: .8},
+  marker:  {name: 'Marker',      fam: "'Permanent Marker'",  fb: "'Comic Sans MS',cursive",          w: 400, caps: false, ls: '0',     k: .9},
+  speed:   {name: 'Speed',       fam: "'Racing Sans One'",   fb: "Impact,sans-serif",                w: 400, caps: true,  ls: '.02em', k: .95},
+  serif:   {name: 'Serif',       fam: "'DM Serif Display'",  fb: "Georgia,serif",                    w: 400, caps: false, ls: '.01em', k: .95},
+  arcade:  {name: 'Arcade',      fam: "'Press Start 2P'",    fb: "'Courier New',monospace",          w: 400, caps: true,  ls: '0',     k: .5}
+};
+const SCHEMES = {
+  'Taxi':         {bg: '#FFD21F', bg2: '#FFB800', ink: '#111318', rim: '#111318'},
+  'Tuxedo':       {bg: '#16181F', bg2: '#2A2E38', ink: '#F4F5F7', rim: '#F4F5F7'},
+  'Peach':        {bg: '#FFC29B', bg2: '#FF7F5C', ink: '#3B0F0B', rim: '#3B0F0B'},
+  'Miami':        {bg: '#FF4FA3', bg2: '#5B5BFF', ink: '#FFFFFF', rim: '#FFFFFF'},
+  'Racing green': {bg: '#0F4D34', bg2: '#0A3A27', ink: '#F1E3B5', rim: '#D9B44A'},
+  'Rosso':        {bg: '#D0142C', bg2: '#A80F22', ink: '#FFFFFF', rim: '#FFFFFF'},
+  'Chrome':       {bg: '#EEF1F4', bg2: '#9AA3AE', ink: '#0E1116', rim: '#0E1116'},
+  'Ice':          {bg: '#FFFFFF', bg2: '#E3EAFF', ink: '#1B36E8', rim: '#1B36E8'},
+  'Lowrider':     {bg: '#3A1470', bg2: '#7B2CBF', ink: '#FFD21F', rim: '#FFD21F'},
+  'Sunset':       {bg: '#FFA23F', bg2: '#D62F6B', ink: '#200A2E', rim: '#200A2E'},
+  'Mint':         {bg: '#C9F5E1', bg2: '#8FE3C0', ink: '#0C3B2E', rim: '#0C3B2E'},
+  'Stealth':      {bg: '#1C1D20', bg2: '#111214', ink: '#8B8F97', rim: '#3A3D44'}
+};
+const LOOKS = [
+  {text: 'ATL BORN', top: 'Atlanta',  bottom: 'Georgia',     size: 'us',   font: 'block',   scheme: 'Taxi',         finish: 'gloss'},
+  {text: 'Mi Vida',  top: '',         bottom: 'Low and slow', size: 'us',  font: 'script',  scheme: 'Lowrider',     finish: 'gloss'},
+  {text: 'TURBO',    top: '',         bottom: '',            size: 'euro', font: 'tech',    scheme: 'Tuxedo',       finish: 'carbon'},
+  {text: 'Big Mama', top: 'The boss', bottom: '',            size: 'us',   font: 'oldeng',  scheme: 'Rosso',        finish: 'gloss'},
+  {text: 'PEACHY',   top: '',         bottom: 'Peach State', size: 'us',   font: 'sign',    scheme: 'Peach',        finish: 'matte'},
+  {text: '2 FAST',   top: '',         bottom: '',            size: 'moto', font: 'stencil', scheme: 'Sunset',       finish: 'matte'},
+  {text: 'NO SLEEP', top: '',         bottom: '',            size: 'euro', font: 'neon',    scheme: 'Miami',        finish: 'gloss'},
+  {text: 'V8 ONLY',  top: 'Garage',   bottom: 'Keep out',    size: 'us',   font: 'speed',   scheme: 'Racing green', finish: 'brushed'},
+  {text: 'Est 1998', top: 'Family',   bottom: 'Auto shop',   size: 'us',   font: 'serif',   scheme: 'Chrome',       finish: 'brushed'},
+  {text: 'DAD TAXI', top: '',         bottom: 'No tips',     size: 'us',   font: 'tall',    scheme: 'Ice',          finish: 'gloss'},
+  {text: 'GAME ON',  top: '',         bottom: '',            size: 'euro', font: 'arcade',  scheme: 'Mint',         finish: 'matte'},
+  {text: 'Her Ride', top: '',         bottom: '',            size: 'moto', font: 'marker',  scheme: 'Stealth',      finish: 'carbon'}
+];
+const expand = l => ({text: l.text, top: l.top || '', bottom: l.bottom || '', size: l.size, font: l.font, caps: FONTS[l.font].caps,
+  finish: l.finish, fade: true, ...SCHEMES[l.scheme]});
+
+/* ── Plate renderer: one function draws every plate on the page ── */
+const SKELETON = '<div class="plate-face"><i class="bolt"></i><i class="bolt"></i><i class="bolt"></i><i class="bolt"></i><div class="plate-top"></div><div class="plate-main"><span class="plate-text"></span></div><div class="plate-bottom"></div><div class="plate-finish"></div><div class="plate-sheen"></div></div>';
+const plates = new Set();
+const ro = 'ResizeObserver' in window ? new ResizeObserver(es => es.forEach(e => fit(e.target.closest('.plate')))) : null;
+
+function fit(el) {
+  if (!el) return;
+  const main = $('.plate-main', el), t = $('.plate-text', el);
+  const aw = main.clientWidth, ah = main.clientHeight, tw = t.offsetWidth, th = t.offsetHeight;
+  if (!aw || !tw || !th) return;
+  t.style.setProperty('--s', Math.min(aw / tw, ah / (th * .8), 1).toFixed(4));
+}
+function setText(t, str, animate) {
+  const next = Array.from(str), prev = t._v || [];
+  let p = 0;
+  while (p < prev.length && p < next.length && prev[p] === next[p]) p++;
+  while (t.childNodes.length > p) t.lastChild.remove();
+  next.slice(p).forEach((ch, i) => {
+    const s = document.createElement('span');
+    s.className = 'ch' + (animate && !RM ? ' in' : '');
+    s.style.setProperty('--d', i);
+    s.textContent = ch === ' ' ? '\u00A0' : ch;
+    t.append(s);
+  });
+  t._v = next;
+}
+function renderPlate(el, c, animate = true) {
+  if (!el._built) {
+    el.classList.add('plate');
+    el.innerHTML = SKELETON;
+    el._built = true;
+    plates.add(el);
+    if (ro) ro.observe($('.plate-main', el));
+  }
+  const size = SIZES[c.size] ? c.size : 'us', f = FONTS[c.font] || FONTS.block;
+  el.dataset.size = size;
+  el.dataset.finish = FINISHES[c.finish] ? c.finish : 'gloss';
+  el.style.setProperty('--p-bg', c.bg);
+  el.style.setProperty('--p-bg2', c.fade === false ? c.bg : (c.bg2 || c.bg));
+  el.style.setProperty('--p-ink', c.ink);
+  el.style.setProperty('--p-rim', c.rim);
+  const t = $('.plate-text', el);
+  t.style.fontFamily = f.fam + ',' + f.fb;
+  t.style.fontWeight = f.w;
+  t.style.letterSpacing = f.ls;
+  t.style.setProperty('--k', f.k);
+  const raw = (c.text || '').slice(0, SIZES[size].max);
+  t.classList.toggle('ghosted', !raw.trim());
+  setText(t, raw.trim() ? (c.caps ? raw.toUpperCase() : raw) : 'YOUR TEXT', animate);
+  $('.plate-top', el).textContent = SIZES[size].lines ? (c.top || '') : '';
+  $('.plate-bottom', el).textContent = SIZES[size].lines ? (c.bottom || '') : '';
+  fit(el);
+}
+function sweep(el) {
+  if (RM) return;
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
+const fitAll = () => plates.forEach(p => { if (p.isConnected) fit(p); else plates.delete(p); });
+if (document.fonts) {
+  document.fonts.ready.then(fitAll);
+  document.fonts.addEventListener && document.fonts.addEventListener('loadingdone', fitAll);
+}
+addEventListener('resize', fitAll);
+
+/* ── 3D tilt that follows the pointer, with a slow idle sway ── */
+function tiltable(zone, target, idle) {
+  if (RM) return;
+  let tx = 0, ty = 0, cx = 0, cy = 0, hover = false, visible = false, running = false;
+  zone.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch') return;
+    const r = zone.getBoundingClientRect();
+    tx = ((e.clientX - r.left) / r.width - .5) * 2;
+    ty = ((e.clientY - r.top) / r.height - .5) * 2;
+    hover = true;
+  });
+  zone.addEventListener('pointerleave', () => { hover = false; });
+  const frame = now => {
+    if (!visible) { running = false; return; }
+    if (!hover) { tx = Math.sin(now / 1400) * idle; ty = Math.cos(now / 1100) * idle * .6; }
+    cx += (tx - cx) * .08; cy += (ty - cy) * .08;
+    target.style.transform = `rotateY(${(cx * 15).toFixed(2)}deg) rotateX(${(-cy * 11).toFixed(2)}deg)`;
+    target.style.setProperty('--sh', (50 - cx * 70).toFixed(1) + '%');
+    requestAnimationFrame(frame);
+  };
+  new IntersectionObserver(es => {
+    visible = es[0].isIntersecting;
+    if (visible && !running) { running = true; requestAnimationFrame(frame); }
+  }).observe(zone);
+}
+
+/* ── Saved state ── */
+const KEY = 'tagsmith:v1';
+const store = {
+  load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } },
+  save(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } }
+};
+const saved = store.load();
+const state = {...expand(LOOKS[0]), qty: 1};
+if (saved.design && SIZES[saved.design.size] && FONTS[saved.design.font]) Object.assign(state, saved.design, {qty: 1});
+let cart = Array.isArray(saved.cart) ? saved.cart.filter(i => i && i.c && SIZES[i.c.size]) : [];
+const persist = () => { const {qty, ...design} = state; store.save({design, cart}); };
+
+/* ── Hero plate: cycles through the looks until someone picks one ── */
+const heroPlate = $('#heroPlate'), heroBtn = $('#heroBtn');
+let hi = 0, heroVisible = true;
+const showHero = animate => {
+  renderPlate(heroPlate, expand(LOOKS[hi]), animate);
+  heroBtn.setAttribute('aria-label', 'Start from this design: ' + LOOKS[hi].text);
+};
+showHero(false);
+setTimeout(() => { $('.plate-text', heroPlate)._v = []; showHero(true); sweep(heroPlate); }, RM ? 0 : 900);
+new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe(heroBtn);
+if (!RM) setInterval(() => {
+  if (document.hidden || !heroVisible) return;
+  hi = (hi + 1) % LOOKS.length;
+  showHero(true);
+  sweep(heroPlate);
+}, 3400);
+heroBtn.addEventListener('click', () => { loadLook(LOOKS[hi]); goBuild(); });
+tiltable($('.hero'), heroBtn, .45);
+
+/* ── Looks strip ── */
+const track = $('#track');
+const MINI_W = {us: 190, euro: 300, moto: 130};
+[0, 1].forEach(copy => LOOKS.forEach(l => {
+  const b = document.createElement('button');
+  b.className = 'mini'; b.type = 'button'; b.style.width = (MINI_W[l.size] + 12) + 'px';
+  if (copy) { b.tabIndex = -1; b.setAttribute('aria-hidden', 'true'); }
+  else b.setAttribute('aria-label', 'Start from this look: ' + l.text);
+  const p = document.createElement('div');
+  b.append(p); track.append(b);
+  renderPlate(p, expand(l), false);
+  b.addEventListener('click', () => { loadLook(l); goBuild(); });
+}));
+
+/* ── Studio controls ── */
+const plate = $('#plate'), carPlate = $('#carPlate'), stage = $('#stage');
+const el = {main: $('#tMain'), top: $('#tTop'), bottom: $('#tBottom'), caps: $('#caps'), count: $('#count'), hint: $('#linesHint'),
+  bg: $('#cBg'), bg2: $('#cBg2'), ink: $('#cInk'), rim: $('#cRim'), fade: $('#fade'), warn: $('#warn'),
+  price: $('#price'), qty: $('#qty'), dims: $('#dims')};
+
+$('#sizes').innerHTML = Object.entries(SIZES).map(([k, s]) =>
+  `<button type="button" class="opt size-opt" data-size="${k}"><span class="shape" style="aspect-ratio:${s.ar}"></span><b>${s.name}</b><small>${s.dims}</small><em>${money(s.price)}</em></button>`).join('');
+$('#swatches').innerHTML = Object.entries(SCHEMES).map(([n, s]) =>
+  `<button type="button" class="opt sw" data-scheme="${n}" aria-label="${n} colors" title="${n}" style="background:linear-gradient(180deg,${s.bg},${s.bg2});color:${s.ink};border-color:${s.rim}">Aa</button>`).join('');
+$('#fonts').innerHTML = Object.entries(FONTS).map(([k, f]) =>
+  `<button type="button" class="opt font-opt" data-font="${k}"><span style="font-family:${f.fam},${f.fb};font-weight:${f.w};font-size:${Math.round(26 * Math.min(f.k, 1))}px">${f.caps ? 'AB12' : 'Ab12'}</span><small>${f.name}</small></button>`).join('');
+$('#finishes').innerHTML = Object.entries(FINISHES).map(([k, f]) =>
+  `<button type="button" class="opt fin-opt" data-finish="${k}"><span class="fin-chip" data-f="${k}"></span>${f.name}<small>${f.extra ? '+ ' + money(f.extra) : 'Included'}</small></button>`).join('');
+
+const lum = h => {
+  const [r, g, b] = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).map(v => v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4);
+  return .2126 * r + .7152 * g + .0722 * b;
+};
+const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + .05) / (y + .05); };
+const unit = c => SIZES[c.size].price + FINISHES[c.finish].extra;
+const clean = v => v.replace(/[^A-Za-z0-9 \-♥★•&#!.']/g, '');
+
+function tween(node, to) {
+  const from = node._n === undefined ? to : node._n;
+  node._n = to;
+  if (RM || from === to) { node.textContent = money(to); return; }
+  const t0 = performance.now();
+  const step = now => {
+    if (node._n !== to) return;
+    const k = Math.min(1, (now - t0) / 380);
+    node.textContent = money(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+function schemeName() {
+  return Object.keys(SCHEMES).find(n => { const s = SCHEMES[n]; return s.bg === state.bg && s.ink === state.ink && s.rim === state.rim && (state.fade ? s.bg2 === state.bg2 : true); });
+}
+function syncControls() {
+  const s = SIZES[state.size];
+  state.text = clean(state.text).slice(0, s.max);
+  el.main.maxLength = s.max;
+  el.main.value = state.text;
+  el.main.style.textTransform = state.caps ? 'uppercase' : 'none';
+  el.top.value = state.top; el.bottom.value = state.bottom;
+  el.top.disabled = el.bottom.disabled = !s.lines;
+  el.hint.hidden = s.lines;
+  el.caps.checked = state.caps;
+  el.bg.value = state.bg; el.bg2.value = state.bg2 || state.bg; el.ink.value = state.ink; el.rim.value = state.rim;
+  el.fade.checked = state.fade !== false;
+  el.bg2.disabled = state.fade === false;
+  const sn = schemeName();
+  $$('#sizes [data-size]').forEach(b => b.setAttribute('aria-pressed', b.dataset.size === state.size));
+  $$('#swatches [data-scheme]').forEach(b => b.setAttribute('aria-pressed', b.dataset.scheme === sn));
+  $$('#fonts [data-font]').forEach(b => b.setAttribute('aria-pressed', b.dataset.font === state.font));
+  $$('#finishes [data-finish]').forEach(b => b.setAttribute('aria-pressed', b.dataset.finish === state.finish));
+}
+function update(animate = true) {
+  const s = SIZES[state.size];
+  renderPlate(plate, state, animate);
+  renderPlate(carPlate, state, false);
+  $('#carWrap').dataset.size = state.size;
+  stage.style.setProperty('--p-bg', state.bg);
+  el.count.textContent = state.text.length + ' / ' + s.max;
+  el.dims.textContent = s.name + ', ' + s.dims;
+  el.warn.hidden = contrast(state.ink, state.bg) >= 1.7;
+  el.qty.textContent = state.qty;
+  tween(el.price, unit(state) * state.qty);
+  plate.setAttribute('aria-label', 'Preview of your plate: ' + (state.text || 'no text yet'));
+  persist();
+}
+function loadLook(l) {
+  Object.assign(state, expand(l));
+  syncControls(); update(); sweep(plate);
+}
+function goBuild() { $('#build').scrollIntoView({behavior: RM ? 'auto' : 'smooth'}); }
+
+el.main.addEventListener('input', () => {
+  const v = clean(el.main.value).slice(0, SIZES[state.size].max);
+  if (v !== el.main.value) el.main.value = v;
+  state.text = v; update();
+});
+el.top.addEventListener('input', () => { state.top = el.top.value; update(); });
+el.bottom.addEventListener('input', () => { state.bottom = el.bottom.value; update(); });
+el.caps.addEventListener('change', () => { state.caps = el.caps.checked; $('.plate-text', plate)._v = []; syncControls(); update(); });
+[['bg', el.bg], ['bg2', el.bg2], ['ink', el.ink], ['rim', el.rim]].forEach(([k, input]) =>
+  input.addEventListener('input', () => { state[k] = input.value.toUpperCase(); syncControls(); update(); }));
+el.fade.addEventListener('change', () => { state.fade = el.fade.checked; if (state.fade && !state.bg2) state.bg2 = state.bg; syncControls(); update(); });
+
+$('#panel').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.size) { state.size = b.dataset.size; }
+  else if (b.dataset.scheme) { Object.assign(state, SCHEMES[b.dataset.scheme], {fade: true}); sweep(plate); }
+  else if (b.dataset.font) { state.font = b.dataset.font; state.caps = FONTS[state.font].caps; $('.plate-text', plate)._v = []; }
+  else if (b.dataset.finish) { state.finish = b.dataset.finish; sweep(plate); }
+  else if (b.dataset.sym) {
+    if (state.text.length < SIZES[state.size].max) state.text += b.dataset.sym;
+  } else return;
+  syncControls(); update();
+});
+$('#qMinus').addEventListener('click', () => { state.qty = Math.max(1, state.qty - 1); update(); });
+$('#qPlus').addEventListener('click', () => { state.qty = Math.min(50, state.qty + 1); update(); });
+
+const tilt = $('#tilt');
+$('#shuffle').addEventListener('click', () => {
+  const pick = o => { const k = Object.keys(o); return k[Math.floor(Math.random() * k.length)]; };
+  let font = pick(FONTS); if (font === state.font) font = pick(FONTS);
+  Object.assign(state, SCHEMES[pick(SCHEMES)], {fade: true, font, caps: FONTS[font].caps, finish: pick(FINISHES)});
+  $('.plate-text', plate)._v = [];
+  if (!RM) { tilt.classList.remove('spin'); void tilt.offsetWidth; tilt.classList.add('spin'); }
+  syncControls(); update();
+});
+tilt.addEventListener('animationend', e => { if (e.animationName === 'spin') tilt.classList.remove('spin'); });
+tiltable($('#stagePlate'), tilt, .25);
+
+/* ── Order drawer ── */
+const drawer = $('#drawer'), scrim = $('#scrim'), cartBtn = $('#cartBtn'), countEl = $('#cartCount'), toastEl = $('#toast');
+let toastTimer;
+const toast = msg => { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200); };
+function renderCart() {
+  const list = $('#items');
+  list.textContent = '';
+  let total = 0, n = 0;
+  if (!cart.length) {
+    const li = document.createElement('p');
+    li.className = 'empty'; li.textContent = 'Nothing here yet. Design a plate and add it to your order.';
+    list.append(li);
+  }
+  cart.forEach((item, i) => {
+    const c = item.c, line = unit(c) * item.qty;
+    total += line; n += item.qty;
+    const li = document.createElement('li');
+    const thumb = document.createElement('div'), p = document.createElement('div');
+    thumb.append(p);
+    const info = document.createElement('div');
+    const b = document.createElement('b'); b.textContent = c.caps ? c.text.toUpperCase() : c.text;
+    const d = document.createElement('small'); d.textContent = `${SIZES[c.size].name}, ${FONTS[c.font].name} lettering, ${FINISHES[c.finish].name.toLowerCase()}`;
+    const q = document.createElement('small'); q.textContent = 'Quantity ' + item.qty;
+    const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm'; rm.textContent = 'Remove';
+    rm.addEventListener('click', () => { cart.splice(i, 1); renderCart(); persist(); });
+    info.append(b, d, q, rm);
+    const amt = document.createElement('span'); amt.className = 'amt'; amt.textContent = money(line);
+    li.append(thumb, info, amt); list.append(li);
+    renderPlate(p, c, false);
+  });
+  $('#total').textContent = money(total);
+  $('#checkout').disabled = !cart.length;
+  countEl.textContent = n;
+}
+function openCart(open) {
+  drawer.classList.toggle('open', open); scrim.classList.toggle('open', open);
+  if (open) { renderCart(); $('#coNote').hidden = true; $('#closeCart').focus(); requestAnimationFrame(fitAll); }
+  else cartBtn.focus();
+}
+cartBtn.addEventListener('click', () => openCart(true));
+$('#closeCart').addEventListener('click', () => openCart(false));
+scrim.addEventListener('click', () => openCart(false));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('open')) openCart(false); });
+$('#checkout').addEventListener('click', () => { $('#coNote').hidden = false; });
+
+$('#add').addEventListener('click', () => {
+  if (!state.text.trim()) { toast('Type your plate text first'); el.main.focus(); return; }
+  const {qty, ...c} = state;
+  cart.push({c: {...c}, qty});
+  persist();
+  const done = () => { renderCart(); countEl.classList.remove('bump'); void countEl.offsetWidth; countEl.classList.add('bump'); toast('Added to order'); };
+  if (RM || !plate.animate) { done(); return; }
+  const src = plate.getBoundingClientRect(), dst = cartBtn.getBoundingClientRect();
+  const flyer = document.createElement('div'), p = document.createElement('div');
+  flyer.className = 'flyer';
+  flyer.style.cssText = `left:${src.left}px;top:${src.top}px;width:${src.width}px`;
+  flyer.append(p); document.body.append(flyer);
+  renderPlate(p, c, false);
+  const dx = dst.left + dst.width / 2 - (src.left + src.width / 2), dy = dst.top + dst.height / 2 - (src.top + src.height / 2);
+  flyer.animate([
+    {transform: 'translate(0,0) scale(1) rotate(0)', opacity: 1},
+    {transform: `translate(${dx * .55}px,${dy * .35 - 50}px) scale(.5) rotate(-10deg)`, opacity: 1, offset: .55},
+    {transform: `translate(${dx}px,${dy}px) scale(.05) rotate(12deg)`, opacity: .3}
+  ], {duration: 760, easing: 'cubic-bezier(.5,0,.3,1)'}).onfinish = () => { plates.delete(p); flyer.remove(); done(); };
+});
+
+/* ── Page chrome ── */
+const nav = $('#nav');
+const onScroll = () => nav.classList.toggle('scrolled', scrollY > 40);
+addEventListener('scroll', onScroll, {passive: true}); onScroll();
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold: .15});
+$$('.rv').forEach(n => io.observe(n));
+const carIo = new IntersectionObserver(es => { if (es[0].isIntersecting) { $('#car').classList.add('in'); carIo.disconnect(); } }, {threshold: .5});
+carIo.observe($('#car'));
+
+syncControls(); update(false); renderCart();
+})();
+</script>
+</body>
+</html>
